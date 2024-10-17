@@ -54,13 +54,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    class Role(models.TextChoices):
-        ADMIN = 'ADMIN', 'Admin'
-        COSTUMER = 'COSTUMER', 'Costumer'
-        RESTAURANT = 'RESTAURANT', 'Restaurant'
 
-    base_role = Role.ADMIN
-    role = models.CharField(max_length=50, choices=Role.choices)
+    # role = models.CharField(max_length=50, choices=Role.choices)
     email = models.EmailField('email address', max_length=255, unique=True)
     is_staff = models.BooleanField('staff status', default=False,
                                    help_text='Designates whether the user can log into this admin site.')
@@ -108,47 +103,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-class UserCostumerManager(CustomUserManager):
-    def get_queryset(self, *args, **kwargs):
-        results = super().get_queryset(*args, **kwargs)
-        return results.filter(role=User.Role.COSTUMER)
-
-
-class UserCostumer(User):
-
-    base_role = User.Role.COSTUMER
-
-    class Meta:
-        proxy = True
-
-    objects = UserCostumerManager()
-
-
-class UserRestaurantManager(CustomUserManager):
-    def get_queryset(self, *args, **kwargs):
-        results = super().get_queryset(*args, **kwargs)
-        return results.filter(role=User.Role.RESTAURANT)
-
-
-class UserRestaurant(User):
-
-    base_role = User.Role.RESTAURANT
-
-    class Meta:
-        proxy = True
-
-    objects = UserRestaurantManager()
-
-
-class Profile(BaseModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    costumer = models.OneToOneField(Person, on_delete=models.CASCADE, null=True, blank=True)
-    restaurant = models.OneToOneField(Company, on_delete=models.CASCADE, null=True, blank=True)

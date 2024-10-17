@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Basic directory settings
 PROJECT_DIR = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-# BASE_DIR = os.path.join(PROJECT_DIR, 'rachaqui')
+# BASE_DIR = os.path.join(PROJECT_DIR, 'CidadaoSmart')
 # Por enquanto o base dir será o mesmo que o project dir por que ainda não foram criados pastas exteriores ao projeto
 BASE_DIR = PROJECT_DIR
 
@@ -71,7 +71,6 @@ LIB_APPS = [
 PROJECT_APPS = [
     'base.apps.BaseConfig',
     'api.apps.ApiConfig',
-    'restaurant.apps.RestaurantConfig',
     'accounts.apps.AccountConfig'
 ]
 
